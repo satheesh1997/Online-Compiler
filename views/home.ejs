@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Code Compiler</title>
+    <link rel='stylesheet' href='/stylesheets/bootstrap.min.css' />
+    <style type="text/css" media="screen">
+        @font-face {
+            font-family: "Source Code Pro";
+            src: url("/fonts/SourceCodePro-Medium.ttf");
+        }
+        body{
+            font-family: 'Source Code Pro', sans-serif;
+        }
+        #editor{
+            height: 92vh;
+            margin-top: 51px;
+            border-right: 1px dashed grey;
+            font-family: 'Source Code Pro', monospace !important;
+        }
+        .preloader{
+            position: fixed;
+            height: 100vh;
+            width: 100cm;
+            z-index: 9999;
+            background: white;
+            padding-top:100px;
+        }
+    </style>
+    <script src="/javascripts/jquery-3.2.1.min.js"></script
+</head>
+<body>
+<div class="preloader">
+    <div class="text-left">
+        <img src="/images/712.gif">
+    </div>
+</div>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">CODE COMPILER</a>
+        </div>
+        <ul class="nav navbar-nav">
+            <li class="active"><a href="#">Home</a></li>
+            <li><a data-toggle="modal" href="#languages-list">Languages</a></li>
+            <li><a data-toggle="modal" href="#dev_team">Developers</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li><a href="#" id="name"><span class="glyphicon glyphicon-user"></span> </a></li>
+            <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+        </ul>
+    </div>
+</nav>
+<div class="container-fluid" style="margin: 0; padding: 0;">
+    <div id="editor" class="col-lg-6 col-md-6">//Enter Your Code Here</div>
+    <div class="col-lg-6 col-md-6" style="margin-top: 70px;">
+        <div class="col-lg-6 col-md-6">
+            <div class="dropdown">
+                <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown">
+                    Choose a theme
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                    <li role="presentation" class="dropdown-header">Themes Available</li>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" onclick="load_theme(1)">Ambiance</a></li>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" onclick="load_theme(2)">Chaos</a></li>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" onclick="load_theme(3)">Chrome</a></li>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" onclick="load_theme(4)">Clouds</a></li>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" onclick="load_theme(5)">Clouds Midnight</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-lg-6 col-md-6">
+            <div class="dropdown">
+                <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
+                    Select a programming language
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                    <li role="presentation" class="dropdown-header">Languages Available</li>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" onclick="load_c()">C</a></li>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" onclick="load_cpp()">C++</a></li>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" onclick="load_java()">JAVA</a></li>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" onclick="load_py()">PYTHON3.5</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="row" style="margin-top:20px;padding-top:20px;padding-bottom: 10px; border-top:1px dashed grey;border-bottom:1px dashed grey;">
+            <div class="col-lg-6 col-md-6">
+                <div class="form-group">
+                    <label for="comment">Input-1:</label>
+                    <textarea class="form-control" rows="5" id="testcase_1"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="comment">Output-1:</label>
+                    <textarea class="form-control" rows="3" id="o_1"></textarea>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6">
+                <div class="form-group">
+                    <label for="comment">Input-2:</label>
+                    <textarea class="form-control" rows="5" id="testcase_2"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="comment">Output-2:</label>
+                    <textarea class="form-control" rows="3" id="o_2"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="padding-top:10px;">
+            <div class="col-lg-6 col-md-6">
+                <div class="alert alert-success" style="display: none;" id="out_1_box">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    <strong>Result-1: <br></strong> <span id="out_1"></span>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6">
+                <div class="alert alert-success" style="display: none;" id="out_2_box">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    <strong>Result-2: <br></strong> <span id="out_2"></span>
+                </div>
+            </div>
+            <div class="alert alert-danger" style="display: none;" id="error_box">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <strong>Error:<br></strong> <span id="error_msg" style="font-family: 'Source Code Pro', monospace !important;"></span>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="languages-list">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Languages Available</h4>
+            </div>
+            <div class="modal-body" id="langs">
+                <ul class="list-group" style="border: 0px solid white !important;">
+                    <li class="list-group-item" style="border: 0px solid white !important;" >
+                        <span class="badge">OK</span>
+                        C
+                    </li>
+                    <li class="list-group-item" style="border: 0px solid white !important;">
+                        <span class="badge">OK</span>
+                        C++
+                    </li>
+                    <li class="list-group-item" style="border: 0px solid white !important;">
+                        <span class="badge">OK</span>
+                        JAVA
+                    </li>
+                    <li class="list-group-item" style="border: 0px solid white !important;">
+                        <span class="badge">OK</span>
+                        PYTHON3.5
+                    </li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<div class="modal fade" id="dev_team">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Developers</h4>
+            </div>
+            <div class="modal-body">
+                <div class="col-lg-6 col-md-6 text-center">
+                    <div class="panel panel-default">
+                        <div class="panel-body text-center" style="padding: 0;margin: 0;">
+                            <img src="/images/dev_1.jpg" style="width: 250px;height:250px;">
+                        </div>
+                        <div class="panel-footer text-center">
+                            Satheesh Kumar D<br><br>IIICSE-C
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6">
+                    <div class="panel panel-default">
+                        <div class="panel-body text-center" style="padding: 0;margin: 0;">
+                            <img src="/images/dev_2.jpg" style="width: 250px;height:250px;">
+                        </div>
+                        <div class="panel-footer text-center">
+                            Somesh Kumar K<br><br>IIICSE-C
+                        </div>
+                    </div>
+                </div>
+                <br><br>
+                <p class="lead text-center">
+                	Contact us for reporting errors or bugs.<br>
+                	Need to join this team-> Meet us.
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<div class="btn-group" style="position: fixed; bottom: 20px;right: 20px;">
+    <button type="button" class="btn btn-default" onclick='window.location="/"'>Reset</button>
+    <button type="button" class="btn btn-default" onclick="submit_code()">Compile</button>
+</div>
+<script src="/javascripts/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="/javascripts/ace/ace.js" type="text/javascript" charset="utf-8"></script>
+<script src="/javascripts/ace/ext-language_tools.js" type="text/javascript" charset="utf-8"></script>
+<script src="/javascripts/user.js" type="text/javascript" charset="utf-8"></script>
+</body>
+</html>

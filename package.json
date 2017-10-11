@@ -1,0 +1,20 @@
+{
+  "name": "compiler",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www"
+  },
+  "dependencies": {
+    "body-parser": "*",
+    "cookie-parser": "*",
+    "debug": "^3.1.0",
+    "ejs": "*",
+    "express": "^4.16.1",
+    "express-session": "^1.15.6",
+    "googleapis": "^22.2.0",
+    "morgan": "*",
+    "serve-favicon": "*",
+    "request": "*"
+  }
+}
